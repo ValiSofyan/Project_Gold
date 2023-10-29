@@ -11,8 +11,8 @@ app.use(express.urlencoded({ extended: true }))
 
 app.get("/SkillData", async (req,res)=>{
     try {
-        const databooks = await db("UserData").select('id','SkillData_id')
-        res.status(200).json(databooks)        
+        const skillData = await db("UserData").select('id','SkillData_id')
+        res.status(200).json(skillData)        
     } catch (error) {
         res.status(500).json(error)    
     }

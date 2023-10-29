@@ -5,6 +5,7 @@
 exports.up = function(knex) {
     return knex.schema.createTable('oho',table=>{
         table.increments('id').primary()
+
         table.integer("user_id").unsigned().references("id").inTable("UserData")
         table.timestamp('aplicationDate_at')
         table.timestamp('updated_at')
