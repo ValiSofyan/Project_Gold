@@ -38,13 +38,5 @@ class userController{
 
     }
 }
-gitignore
-        README.md
-        app.js
-        controller/
-        db/
-        package-lock.json
-        package.json
-        routes/
 
 module.exports = userController
