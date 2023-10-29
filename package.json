@@ -19,6 +19,8 @@
   "homepage": "https://github.com/ValiSofyan/Project_Gold#readme",
   "keywords": [],
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "knex": "^3.0.1",
+    "pg": "^8.11.3"
   }
 }
