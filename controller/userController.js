@@ -9,7 +9,7 @@ class userController{
                 idDynamic = dbUser[dbUser.length - 1].id + 1;
             } else {
                 idDynamic = 1; 
-            }
+            } 
 
             const {userName,password,skill} = req.body
             if (!userName || !password || !skill) {

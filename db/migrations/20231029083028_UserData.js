@@ -11,7 +11,7 @@ exports.up = function(knex) {
         table.string('first_name')
         table.string('last_name')
         table.string('phone_number')
-        table.string("SkillData_id").unsigned().references("id").inTable("SkillData")
+        table.integer("skilldata_id").unsigned().references("id").inTable("SkillData")
         table.timestamp('registered_at')
         table.timestamp('updated_at')
     })

@@ -10,7 +10,6 @@ exports.up = function(knex) {
         table.string('description')
         table.string('location')
         table.timestamp('postdate_at')
-        table.timestamp('updated_at')
     })
   
 };

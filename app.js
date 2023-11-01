@@ -11,12 +11,13 @@ app.use(express.urlencoded({ extended: true }))
 
 app.get("/SkillData", async (req,res)=>{
     try {
-        const skillData = await db("UserData").select('id','SkillData_id')
+        const skillData = await db("SkillData").select('id','skill')
         res.status(200).json(skillData)        
     } catch (error) {
         res.status(500).json(error)    
     }
 })
+
 app.listen(PORT, ()=>{
     console.log("aku pulang");
 })

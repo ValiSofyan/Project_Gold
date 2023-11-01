@@ -3,12 +3,13 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-    return knex.schema.createTable('oho',table=>{
+    return knex.schema.createTable('application',table=>{
         table.increments('id').primary()
-
+        table.integer("job_id").unsigned().references("id").inTable("joblisting")
         table.integer("user_id").unsigned().references("id").inTable("UserData")
         table.timestamp('aplicationDate_at')
-        table.timestamp('updated_at')
+        
+        
     })
   
 };
@@ -18,5 +19,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-    return knex.schema.dropTable("oho")
+    return knex.schema.dropTable("application")
 };
