@@ -1,5 +1,5 @@
 const routes = require ("express").Router()
-const usercon = require("../../model/userManipulate/userDelete")
+const usercon = require("../../controller/userManipulate/userDelete")
 
 routes.delete("/userdelete", usercon.deleteUser )
 

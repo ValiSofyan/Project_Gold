@@ -3,6 +3,7 @@ const db = require("../../db/db");
 
 class updateCorp {
     static async corpUpdate (req, res) {
+        const currentDate = new Date()
         const { id, username, password,website } = req.body;
 
         if (!id || (!username && !password )) {
@@ -23,6 +24,7 @@ class updateCorp {
                     username,
                     password,
                     website,
+                    updated_at:currentDate
                     // email,
                     // first_name,
                     // last_name,

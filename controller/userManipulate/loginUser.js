@@ -2,16 +2,20 @@ const express = require("express");
 const db = require("../../db/db");
 
 class loginModel {
+    
     static async loginUser(req, res) {
-        const { username, password } = req.body;
-
-        if (!username || !password) {
+        if (!req.body) {
+            return res=true;
+        }
+        const UserData = req.body;
+            
+        if (!UserData.username || !UserData.password) {
             return res.status(400).json("Missing username or password" );
         }
 
         try {
             const user = await db("UserData")
-                .where({ username, password })
+                .where(UserData)
                 .select('id', 'username', 'password')
                 .first();
 

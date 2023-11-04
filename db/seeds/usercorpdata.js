@@ -150,6 +150,6 @@ exports.seed = async function(knex) {
   ]);
 };
 
-
+console.log();
 
 

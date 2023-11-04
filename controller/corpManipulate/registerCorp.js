@@ -3,6 +3,7 @@ const db = require("../../db/db");
 
 class registrationModel2 {
     static async registerCorp(req, res) {
+        const currentDate = new Date()
         const { username, password, website } = req.body;
 
         if (!username || !password || !website) {
@@ -23,6 +24,7 @@ class registrationModel2 {
                         username,
                         password,
                         website,
+                        registered_at: currentDate
                     });
 
                 res.status(201).json("Register succes");

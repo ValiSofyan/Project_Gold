@@ -6,6 +6,7 @@ exports.up = function(knex) {
     return knex.schema.createTable('joblisting',table=>{
         table.increments('id').primary()
         table.integer("company_id").unsigned().references("id").inTable("UserCorpData")
+        table.integer("skilldata_id").unsigned().references("id").inTable("SkillData")
         table.string('title')
         table.string('description')
         table.string('location')

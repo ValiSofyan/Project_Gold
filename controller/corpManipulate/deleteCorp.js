@@ -3,6 +3,7 @@ const db = require("../../db/db");
 class Corpdelete {
 static async deleteCorp(req, res) {
     const { id } = req.body;
+    
 
     if (!id) {
         return res.status(400).json("Missing 'id' field" );

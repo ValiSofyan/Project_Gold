@@ -1,5 +1,5 @@
 const routes = require ("express").Router()
-const update = require("../../model/corpManipulate/updateCorp")
+const update = require("../../controller/corpManipulate/updateCorp")
 
 routes.patch("/corpupdate", update.corpUpdate )
 

@@ -1,5 +1,5 @@
 const routes = require ("express").Router()
-const usercon = require("../../model/userManipulate/userUpdate")
+const usercon = require("../../controller/userManipulate/userUpdate")
 
 routes.patch("/userupdate", usercon.updateUser )
 
