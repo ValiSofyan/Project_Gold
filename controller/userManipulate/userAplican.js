@@ -10,7 +10,7 @@ class createApplication {
         console.log(isLoginSuccessful);
 
         try {
-                if(isLoginSuccessful){
+            if(isLoginSuccessful){
                 const { id,iduser} = req.body;
 
                 const existingJob = await db("joblisting")

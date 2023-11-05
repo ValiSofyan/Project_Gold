@@ -29,9 +29,7 @@ class createJob {
                     });
 
                 res.status(201).json("Created job vacancy successfully!");
-            } else {
-                res.status(401).json({ error: 'Login failed' });
-            }
+            } 
         } catch (error) {
             res.status(500).json({ error: 'Unable to create job listing' });
         }
