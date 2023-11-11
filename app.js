@@ -1,22 +1,17 @@
-const { log } = require("console")
 const express = require("express")
 const app = express ()
-const PORT = process.env.PORT || 3000
+const PORT = 3000
 const routes = require("./routes")
-const datas = require("./db/datas.json")
-const db = require("../Project_Gold/db/db")
+const path = require("path");
+const cors = require('cors');
+const db = require("./db/db");
 
+
+app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
-app.get("/SkillData", async (req,res)=>{
-    try {
-        const skillData = await db("SkillData").select('id','skill')
-        res.status(200).json(skillData)        
-    } catch (error) {
-        res.status(500).json(error)    
-    }
-})
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 app.listen(PORT, ()=>{
     console.log("aku pulang");

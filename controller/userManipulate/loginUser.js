@@ -4,12 +4,12 @@ class loginModel {
     
     static async loginUser(req, res) {
         if (!req.body) {
-            return res=true;
+            return res.render('error', { message: 'No request body provided' });
         }
         const UserData = req.body;
             
         if (!UserData.username || !UserData.password) {
-            return res.status(400).json("Missing username or password" );
+            return res.render('error', { message: 'Missing username or password' });
         }
 
         try {
@@ -19,13 +19,13 @@ class loginModel {
                 .first();
 
             if (!user) {
-                return res.status(401).json("Login failed" );
+                return res.render('error', { message: 'Login failed' });
             }
 
-            res.status(200).json(`selamat datang ${user.username}`);
+            res.render('welcome', { username: user.username });
         } catch (error) {
             console.error("Error in loginUser:", error);
-            res.status(500).json("Internal server error" );
+            res.render('error', { message: 'Internal server error' });
         }
     }
 }
