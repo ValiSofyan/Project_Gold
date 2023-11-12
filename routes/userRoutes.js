@@ -2,7 +2,7 @@ const express = require("express");
 const loginModel = require("../controller/userManipulate/loginUser");
 const registerUser = require("../controller/userManipulate/registerUser");
 const usercon = require("../controller/userManipulate/userUpdate");
-const usercon1 = require("../controller/userManipulate/userDelete");
+const userDelete = require("../controller/userManipulate/userDelete");
 const apply = require("../controller/userManipulate/userAplican");
 const db = require("../db/db");
 
@@ -16,11 +16,12 @@ router.get("/login", (req, res) => {
 router.post("/loginuser", async (req, res) => {
     try {
         const user = await loginModel.loginUser(req, res);
+        console.log(user)
         console.log("User login response:", user);
-        
+
         if (user) {
-            console.log(user.id);
-            res.status(200).render('userHome.ejs', { user_id: user.id });
+            const dataContents = await db("joblisting").select("title", "description");
+            res.status(200).render("userHome.ejs", { dataContents });
         } else {
             res.status(401).render('logincorp.ejs', { error: "Login failed", username: null });
         }
@@ -63,29 +64,46 @@ router.route('/update')
     }
   })
   .post(async (req, res) => {
-        
-        try {
-            if (dataContents) {
-                const user = await usercon.updateUser(req, res);
-                const dataContents = await db("SkillData").select("id", "skill");
-        
-                res.status(200).render('profileuser.ejs', { username: user, dataContents });
-            } else {
-                // Render an error page with a specific message when dataContents is falsy
-                console.log("salaaah");
-            }
-        } catch (error) {
-            console.error("Error in profileuser route:", error);
-            res.status(500).render('profileuser.ejs', { message: 'Internal server error', username: null, dataContents: [] });
-        }
-    
-    });
+    try {
+      const dataContents = await db("SkillData").select("id", "skill"); // Move this line here
+      if (dataContents) {
+        const user = await usercon.updateUser(req, res);
+        console.log(user);
+        res.status(200).render('profileuser.ejs', { username: user, dataContents });
+      } else {
+        console.log("salaaah");
+      }
+    } catch (error) {
+      console.error("Error in profileuser route:", error);
+      res.status(500).render('profileuser.ejs', { message: 'Internal server error', username: null, dataContents: [] });
+    }
+});
+
+router.route('/delete')
+.post(async (req, res) => {
+    try {
+        const dataContents = await db("SkillData").select("id", "skill");
+        const user = await userDelete.deleteUser(req, res);
+        console.log(user);
+        res.status(200).render('profileuser.ejs', { username: user, dataContents });
+    } catch (error) {
+        console.error("Error in delete route:", error);
+        res.status(500).render('profileuser.ejs', { message: 'Internal server error', username: null, dataContents: [] });
+    }
+});
+router.get('/home', async (req, res) => {
+    try {
+        const dataContents = await db("joblisting").select("description", "skilldata_id", "title");
+        console.log(dataContents);
+        res.render('corpHome.ejs', { dataContents });
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 
-
-
-
-router.delete("/userdelete", usercon1.deleteUser);
+router.delete("/userdelete", userDelete.deleteUser);
 router.post("/crApply", apply.createApply);
 
 module.exports = router;

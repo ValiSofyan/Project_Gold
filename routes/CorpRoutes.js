@@ -1,24 +1,26 @@
 const express = require('express');
-const routes = require("express").Router();
+const router = require("express").Router();
 const create = require("../controller/corpManipulate/corpCreateJob")
 const deletecon = require("../controller/corpManipulate/deleteCorp")
 const loginModel_2 = require("../controller/corpManipulate/loginCorp")
 const registerCorp = require("../controller/corpManipulate/registerCorp")
 const updatecon = require("../controller/corpManipulate/updateCorp")
+const db = require("../db/db");
 
 
 // corp
-routes.get("/login", (req, res) => {
+router.get("/login", (req, res) => {
     res.status(200).render("logincorp.ejs");
 });
 
-routes.post("/logincorp", async (req, res) => {
+router.post("/logincorp", async (req, res) => {
     try {
         const user = await loginModel_2.loginCorp1(req, res);
         console.log("User login response:", user);
         
         if (user) {
-            res.status(200).render('corpHome.ejs', { username: user.username });
+            const dataContents = await db("UserData").select("username", "skilldata_id");
+            res.status(200).render("corpHome.ejs", { dataContents });
         }
     } catch (error) {
         console.error("Error in login route:", error);
@@ -26,15 +28,17 @@ routes.post("/logincorp", async (req, res) => {
     }
 });
 
-routes.get("/signup", (req, res) => {
+
+router.get("/signup", (req, res) => {
     res.status(200).render("registerCorp.ejs");
 });
-routes.post("/registerCorp", async (req, res) => {
+router.post("/registerCorp", async (req, res) => {
     try {
         const user = await registerCorp.registerCorp(req, res);
         console.log("User registration response:", user);
         if (user) {
-            res.status(200).render('corpHome.ejs', { username: user.username });
+            const dataContents = await db("UserData").select("username", "skilldata_id");
+            res.status(200).render("corpHome.ejs", { dataContents });
         } else {
             res.status(401).render('registerCorp.ejs', { message: 'Registration failed', username: null });
         }
@@ -44,12 +48,57 @@ routes.post("/registerCorp", async (req, res) => {
     }
 });
 
-routes.get("/corpcreateget", create.createJobListing )
-routes.patch("/corpupdate", updatecon.corpUpdate )
-// routes.post("/regiscorp", registerCorp.registerCorp)
-// routes.post("/loginModel_2", logincon.loginCorp1  )
-routes.delete("/corpdelete", deletecon.deleteCorp )
-routes.post("/corpcreate", create.createJobListing )
+router.route('/create')
+  .get(async (req, res) => {
+    try {
+      const dataContents = await db("SkillData").select("id", "skill");
+      res.status(200).render("createJob.ejs", { dataContents });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  })
+
+  .post(async (req, res) => {
+    try {
+        const dataContents = await db("SkillData").select("id", "skill");
+
+        if (dataContents) {
+            const user = await create.createJobListing(req, res);
+            console.log(dataContents, "asdasd");
+
+            res.status(200).render('createJob.ejs', { username: user, dataContents });
+        } else {
+            console.log("salaaah");
+        }
+    } catch (error) {
+        console.error("Error in createJob route:", error);
+        res.status(500).render('createJob.ejs', { message: 'Internal server error', username: null, dataContents: [] });
+    }
+});
 
 
-module.exports = routes
+
+
+
+
+
+
+
+router.get('/home', async (req, res) => {
+    try {
+        const dataContents = await db("UserData").select("username", "skilldata_id");
+        console.log(dataContents.title);
+        res.render('corpHome.ejs', { dataContents });
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+router.patch("/corpupdate", updatecon.corpUpdate )
+router.delete("/corpdelete", deletecon.deleteCorp )
+router.post("/corpcreate", create.createJobListing )
+
+
+module.exports = router

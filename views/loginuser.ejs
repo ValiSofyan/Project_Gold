@@ -39,8 +39,6 @@
                         <%= message %>
                         </div>
                     <% } %>
-                   
-                        <!-- Rest of your form code -->
                         <form action="loginuser" method="post" class="w-100">
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control form-control-lg bg-light fs-6" name="username" placeholder="Username">
@@ -55,7 +53,8 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <button type="submit" class="btn btn-lg btn-primary w-100 fs-6">Login</button>
+                                <button type="submit" class="btn btn-lg btn-primary w-100 fs-6" href="/api/user/home">Login</button>
+                                
                             </div>
                         </form>
                     <div  class="row nav-item">

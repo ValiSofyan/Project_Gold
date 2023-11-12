@@ -11,30 +11,26 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-                <a class="navbar-brand" href="#">CareerLink</a>
+                <a class="navbar-brand" href="/api/corp/home">CareerLink</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Home</a>
+                            <a class="nav-link" href="/api/corp/home">Home</a>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
-                        </li> -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="userProfileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 User Profile
                             </a>
                             <div class="dropdown-menu" aria-labelledby="userProfileDropdown">
-                                <a class="dropdown-item" href="#">My Profile</a>
-                                <a class="dropdown-item" href="#">Settings</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Logout</a>
+                                <form action="/api/corp/create" method="get">
+                                    <button type="submit" class="dropdown-item">My Profile</button>
+                                </form>
+                                <form action="/api/user/login" method="get">
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
                             </div>
                         </li>
                     </ul>
@@ -44,59 +40,63 @@
     </header>
     
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Job Listings</h1>
+        <h1 class="text-center mb-4">choose your candidate</h1>
 
-        <!-- Job Listings -->
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="https://drive.google.com/uc?id=1qo4cQtvnAxymuDI8YMOwYikluFpqpEwL" class="card-img-top" alt="Job 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Software Engineer</h5>
-                        <p class="card-text">We're looking for a skilled Software Engineer to join our team. Apply now!</p>
-                        <a href="#" class="btn btn-primary">Apply</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="https://drive.google.com/uc?id=103YXh92jr7-ppZAktywFjM_lWXCMLH7j" class="card-img-top" alt="Job 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Software Engineer</h5>
-                        <p class="card-text">We're looking for a skilled Software Engineer to join our team. Apply now!</p>
-                        <a href="#" class="btn btn-primary">Apply</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-md-4 mb-4">
-                <div class ="card">
-                    <img src="https://drive.google.com/uc?id=1nQmDabt6hP_V2_7pmA3hZfTrk6H-wTlF" class="card-img-top" alt="Job 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Data Analyst</h5>
-                        <p class="card-text">Join our data analytics team and make a difference. Apply now!</p>
-                        <a href="#" class="btn btn-primary">Apply</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <% const imageUrls = [
+            "https://drive.google.com/uc?id=1QEQVf3wQN-_znzQ3fJsTzqYxe7sAEhVI",
+            "https://drive.google.com/uc?id=19-QK8iS4szRLi6SetWkENi87omkSJvoW",
+            "https://drive.google.com/uc?id=1sW2zfOx_eeD2AebRXjzMArdwAbr9U7WQ",
+            "https://drive.google.com/uc?id=16oJjTEE8L_jHrE5gaAIV60DGkomH1-Xo",
+            "https://drive.google.com/uc?id=1gOcjrPG-x6JAfwo--zRRQ_SX_y_-9rrF",
+            "https://drive.google.com/uc?id=17y6OGl4N7wwIghAUoxy0EfR978qYzXkB",
+            "https://drive.google.com/uc?id=1ubNfD2JyNshly6Afa_r7uTmT-GTUkMcE",
+            "https://drive.google.com/uc?id=1Qp9yQovHhdXwS9y5yHS2sC7TD7yTHDb4",
+            "https://drive.google.com/uc?id=1dn57ucLaFB5OhbMTw0S4ZponjK1e2rBq",
+            "https://drive.google.com/uc?id=1AQeQ0xjnEJKDuFkSgfM7YbkK1IvY_EWa",
+            "https://drive.google.com/uc?id=1u--v3A6bBdEYQjxOHd8U_6bT9kpePICr",
+            "https://drive.google.com/uc?id=1YOkqmNNOqcG3G3QHtXpCmnklZBN4RZ7f",
+            "https://drive.google.com/uc?id=1Hjg5H5vdRqiosMWqVXdLjawTqEsxexQS",
+            "https://drive.google.com/uc?id=17Uog-qt7C2n40tzZXIasn6CoAXtVRcCU",
+            "https://drive.google.com/uc?id=1EoHwv_o6bij1zAc8cH2GgbBLet5-deG9",
+            "https://drive.google.com/uc?id=1CqPMfN6e7sMjeh_FzzLn4CcNP7yscS7-",
+            "https://drive.google.com/uc?id=1_QQdfFcj_8J-s_e9B3v3e6Ltn1lsYVhI",
+            "https://drive.google.com/uc?id=1cP7Xzqt9RV1gYP2mf7kRxgWeder3HCc5",
+            "https://drive.google.com/uc?id=1welejW2yKeFeuyuaGFlYiORbx-YjnQzZ",
+            "https://drive.google.com/uc?id=19E1CrruYQwsWfFHXvz71AkfCLfOG4NXc",
+            "https://drive.google.com/uc?id=1gXKWQy69xBsAfw8G9dGGbMDAkIcaou88",
+            "https://drive.google.com/uc?id=1oIL7TFrqm1sYmuaAYijOnJLrdwDotPeW",
+            "https://drive.google.com/uc?id=1rBoyeguIYZs5EnF5TnzhdzQxaRELolbO",
+            "https://drive.google.com/uc?id=1mzZG28eN0Fajq20LTCEPM7_50YDf10Db",
+            "https://drive.google.com/uc?id=1LoP5m63i5swcrnAUccdfZoe4rGSGaV4e"
+        ]; %>
+
+        <style>
+            .custom-card {
+                height: 100%; 
+            }
+        </style>
         
+        <% for (let i = 0; i < dataContents.length; i += 6) { %>
+            <div class="row">
+                <% for (let j = i; j < i + 6 && j < dataContents.length; j++) { %>
+                    <div class="col-md-4 mb-4">
+                        <div class="card custom-card">
+                            <img src="<%= imageUrls[j] %>" class="card-img-top" alt="<%= dataContents[j].title %>">
+                            <div class="card-body">
+                                <h3 class="card-title"><%= dataContents[j].username %></h3>
+                                <h5 class="card-title"><%= dataContents[j].skilldata_id %> Skill Id</h5>
+                                <a href="#" class="btn btn-primary">Apply</a>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+
         <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
         </nav>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

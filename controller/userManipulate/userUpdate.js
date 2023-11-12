@@ -34,7 +34,6 @@ class UpdateUser {
             updated_at: currentDate,
           });
   
-        // Return dataContents after the update operation
         return dataContents;
       } catch (error) {
         console.error("Error in updateUser:", error);
