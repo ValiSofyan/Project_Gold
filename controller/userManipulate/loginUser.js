@@ -1,15 +1,16 @@
 const db = require("../../db/db");
 
 class loginModel {
-    
     static async loginUser(req, res) {
-        if (!req.body) {
-            return res.render('error', { message: 'No request body provided' });
-        }
         const UserData = req.body;
-            
+        if (!req.body) {
+            res.render('loginuser', { message: 'No request body provided' });
+            return null;
+        }
+
         if (!UserData.username || !UserData.password) {
-            return res.render('error', { message: 'Missing username or password' });
+            res.render('loginuser', { message: 'Missing username or password' });
+            return null;
         }
 
         try {
@@ -19,13 +20,15 @@ class loginModel {
                 .first();
 
             if (!user) {
-                return res.render('error', { message: 'Login failed' });
+                res.render('loginuser', { message: 'Login failed' });
+                return null;
             }
-
-            res.render('welcome', { username: user.username });
+            // console.log(user.username);
+            return user;
         } catch (error) {
             console.error("Error in loginUser:", error);
-            res.render('error', { message: 'Internal server error' });
+            res.render('loginuser', { message: 'Internal server error' });
+            return null;
         }
     }
 }

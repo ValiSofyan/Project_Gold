@@ -1,13 +1,12 @@
-const express = require("express");
 const db = require("../../db/db");
 
 class registrationModel2 {
     static async registerCorp(req, res) {
         const currentDate = new Date()
         const { username, password, website } = req.body;
-
+        console.log(username);
         if (!username || !password || !website) {
-            return res.status(400).json("Missing required fields" );
+            return null;
         }
 
         try {
@@ -17,7 +16,7 @@ class registrationModel2 {
                 .first();
 
             if (existingUser) {
-                return res.status(409).json("User already exists" );
+                return null;            
             } else {
                 const newUserId = await db("UserCorpData")
                     .insert({
@@ -27,11 +26,11 @@ class registrationModel2 {
                         registered_at: currentDate
                     });
 
-                res.status(201).json("Register succes");
-            }
+                    return { username };
+                }
         } catch (error) {
             console.error("Error in registerUser:", error);
-            res.status(500).json("Internal server error" );
+            return null;
         }
     }
 }

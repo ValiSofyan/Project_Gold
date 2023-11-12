@@ -1,34 +1,42 @@
 const db = require("../../db/db");
 
-
 class loginModel_2 {
     static async loginCorp1(req, res) {
-            if (!req.body) {
-                return res=true;
-            }
-            const { username, password } = req.body;
-    
-            if (!username || !password) {
-                return res.status(400).json({ error: "Missing username or password" });
-                
-            } 
+        const { website, password } = req.body;
+        if (!req.body) {
+            res.render('logincorp', { error: true });
+            console.log(website,"2");
+            return null;
+        }
+        
+        
+        if (!website || !password) {
+            res.status(400).render('logincorp', { error: "Missing website or password" });
+            return null;
+        }
+        console.log(website,password);
 
         try {
             const user = await db("UserCorpData")
-                .where({ username, password })
-                .select('id', 'username', 'password')
+                .where({ website, password })
+                .select( 'website', 'password')
                 .first();
 
             if (!user) {
-                return res.status(401).json({ error: "Login failed" });
+                res.status(401).render('logincorp', { error: "Login failed" });
+                return null;
             }
-            res.status(200).json(`selamat datang ${username}`);
+
+            // Return user object instead of rendering directly
+            return user;
 
         } catch (error) {
-            res.status(500).json("Internal server error");
+            console.error("Error in loginCorp1:", error);
+
+            // Return error instead of rendering directly
+            return { error: "Internal server error" };
         }
-        
     }
-};
+}
 
 module.exports = loginModel_2;
