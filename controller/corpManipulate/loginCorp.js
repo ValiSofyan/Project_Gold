@@ -19,7 +19,7 @@ class loginModel_2 {
         try {
             const user = await db("UserCorpData")
                 .where({ website, password })
-                .select( 'website', 'password')
+                .select( 'id','website', 'password')
                 .first();
 
             if (!user) {
@@ -28,7 +28,7 @@ class loginModel_2 {
             }
 
             // Return user object instead of rendering directly
-            return user;
+            return user.id;
 
         } catch (error) {
             console.error("Error in loginCorp1:", error);

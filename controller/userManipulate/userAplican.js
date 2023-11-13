@@ -1,16 +1,11 @@
 const db = require("../../db/db");
-const loginUse = require("./loginUser")
-
 
 class createApplication {
     
     static async createApply(req, res) {
         const applied_at = new Date()
-        const isLoginSuccessful = await loginUse.loginUser(res);
-        console.log(isLoginSuccessful);
 
         try {
-            if(isLoginSuccessful){
                 const { id,iduser} = req.body;
 
                 const existingJob = await db("joblisting")
@@ -39,7 +34,7 @@ class createApplication {
                 }else{
                     res.status(500).json({ error: 'Your Skill not not match with the requirement' });
                 }
-            }
+            
         } catch (error) {
             res.status(500).json({ error: 'Unable to Apply Job' });
         }

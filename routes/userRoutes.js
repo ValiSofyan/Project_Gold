@@ -16,12 +16,15 @@ router.get("/login", (req, res) => {
 router.post("/loginuser", async (req, res) => {
     try {
         const user = await loginModel.loginUser(req, res);
-        console.log(user)
-        console.log("User login response:", user);
+        const id = user;
+
+        console.log("User login response:", id);
 
         if (user) {
+            req.session.userId = id; // Store user ID in session
+
             const dataContents = await db("joblisting").select("title", "description");
-            res.status(200).render("userHome.ejs", { dataContents });
+            res.status(200).render("userHome.ejs", { dataContents, id });
         } else {
             res.status(401).render('logincorp.ejs', { error: "Login failed", username: null });
         }
@@ -30,7 +33,6 @@ router.post("/loginuser", async (req, res) => {
         res.status(500).render('logincorp.ejs', { error: 'Internal server error', username: null });
     }
 });
-
 // Signup route
 router.get("/signup", (req, res) => {
     res.status(200).render("registerUser.ejs");
@@ -52,32 +54,51 @@ router.post("/registerUser", async (req, res) => {
     }
 });
 
-
 router.route('/update')
-  .get(async (req, res) => {
-    try {
-      const dataContents = await db("SkillData").select("id", "skill");
-      res.status(200).render("profileuser.ejs", { dataContents });
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      res.status(500).send("Internal Server Error");
-    }
-  })
-  .post(async (req, res) => {
-    try {
-      const dataContents = await db("SkillData").select("id", "skill"); // Move this line here
-      if (dataContents) {
-        const user = await usercon.updateUser(req, res);
-        console.log(user);
-        res.status(200).render('profileuser.ejs', { username: user, dataContents });
-      } else {
-        console.log("salaaah");
-      }
-    } catch (error) {
-      console.error("Error in profileuser route:", error);
-      res.status(500).render('profileuser.ejs', { message: 'Internal server error', username: null, dataContents: [] });
-    }
-});
+    .get(async (req, res) => {
+        try {
+            const userId = req.session.userId;
+
+            // Check if userId is defined
+            if (!userId) {
+                return res.status(401).send("Unauthorized");
+            }
+
+            userData = await db("UserData")
+                .where("id", userId)
+                .select('username', 'password', 'email', 'first_name', 'last_name', 'phone_number')
+                .first();
+
+            if (!userData) {
+                return res.status(404).send("User not found");
+            }
+
+            console.log(userId, userData.first_name);
+
+            const dataContents = await db("SkillData").select("id", "skill");
+            res.status(200).render("profileuser.ejs", { dataContents, userData });
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    })
+
+    .post(async (req, res) => {
+        try {
+            // Use the userData declared in the outer scope
+            const dataContents = await db("SkillData").select("id", "skill");
+            if (dataContents) {
+                const user = await usercon.updateUser(req, res);
+                console.log(user);
+                res.status(200).render('profileuser.ejs', { username: user, dataContents, userData });
+            } else {
+                console.log("salaaah");
+            }
+        } catch (error) {
+            console.error("Error in profileuser route:", error);
+            res.status(500).render('profileuser.ejs', { message: 'Internal server error', username: null, dataContents: [] });
+        }
+    });
 
 router.route('/delete')
 .post(async (req, res) => {
@@ -95,13 +116,23 @@ router.get('/home', async (req, res) => {
     try {
         const dataContents = await db("joblisting").select("description", "skilldata_id", "title");
         console.log(dataContents);
-        res.render('corpHome.ejs', { dataContents });
+        res.render('userHome.ejs', { dataContents });
     } catch (error) {
         console.error("Error fetching data:", error);
         res.status(500).send("Internal Server Error");
     }
 });
-
+router.get('/home', async (req, res) => {
+    try {
+        const dataContents = await db("joblisting").select("description", "skilldata_id", "title");
+        const user = await loginModel.loginUser(req, res);
+        console.log(dataContents);
+        res.render('userHome.ejs', { dataContents });
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 router.delete("/userdelete", userDelete.deleteUser);
 router.post("/crApply", apply.createApply);

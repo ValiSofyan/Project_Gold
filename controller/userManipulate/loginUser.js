@@ -7,24 +7,22 @@ class loginModel {
             res.render('loginuser', { message: 'No request body provided' });
             return null;
         }
-
         if (!UserData.username || !UserData.password) {
             res.render('loginuser', { message: 'Missing username or password' });
             return null;
         }
-
+        
         try {
             const user = await db("UserData")
-                .where(UserData)
-                .select('id', 'username', 'password')
-                .first();
-
+            .where(UserData)
+            .select('id', 'username', 'password','email','first_name','last_name','phone_number')
+            .first();
+            
             if (!user) {
                 res.render('loginuser', { message: 'Login failed' });
                 return null;
             }
-            // console.log(user.username);
-            return user;
+            return user.id ;
         } catch (error) {
             console.error("Error in loginUser:", error);
             res.render('loginuser', { message: 'Internal server error' });

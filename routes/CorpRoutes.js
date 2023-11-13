@@ -1,4 +1,3 @@
-const express = require('express');
 const router = require("express").Router();
 const create = require("../controller/corpManipulate/corpCreateJob")
 const deletecon = require("../controller/corpManipulate/deleteCorp")
@@ -17,10 +16,11 @@ router.post("/logincorp", async (req, res) => {
     try {
         const user = await loginModel_2.loginCorp1(req, res);
         console.log("User login response:", user);
-        
+        const id=user
         if (user) {
+            req.session.userId = id;
             const dataContents = await db("UserData").select("username", "skilldata_id");
-            res.status(200).render("corpHome.ejs", { dataContents });
+            res.status(200).render("corpHome.ejs", { dataContents,id});
         }
     } catch (error) {
         console.error("Error in login route:", error);
@@ -77,16 +77,15 @@ router.route('/create')
     }
 });
 
-
-
-
-
-
-
-
-
-router.get('/home', async (req, res) => {
+router.get('/homecorp', async (req, res) => {
     try {
+        const userId = req.session.userId;
+        console.log(userId);
+        if (!userId) {
+            // Redirect to login if userId is not set
+            return res.redirect('/login');
+        }
+        
         const dataContents = await db("UserData").select("username", "skilldata_id");
         console.log(dataContents.title);
         res.render('corpHome.ejs', { dataContents });
@@ -96,8 +95,8 @@ router.get('/home', async (req, res) => {
     }
 });
 
+
 router.patch("/corpupdate", updatecon.corpUpdate )
-router.delete("/corpdelete", deletecon.deleteCorp )
 router.post("/corpcreate", create.createJobListing )
 
 

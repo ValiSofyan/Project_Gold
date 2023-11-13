@@ -4,7 +4,14 @@ const PORT = 3001
 const routes = require("./routes")
 const path = require("path");
 const cors = require('cors');
+const session = require('express-session');
 
+app.use(session({
+    secret: 'your-secret-key', 
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+}));
 
 
 app.use(cors());
